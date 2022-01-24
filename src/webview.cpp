@@ -49,6 +49,25 @@ WebView::WebView(QWidget *parent)
     connect(this->page(), &QWebEnginePage::linkHovered, this, [=] (const QString& url) {
         m_linkHovered = url;
     });
+
+    /* This rezooms the page to its correct zoom(default/by ZIM ID) after loading is finished.
+    If the page is result of fulltext search, use the default zoom
+    Needed because of https://bugreports.qt.io/browse/QTBUG-51851 */
+    connect(this, &QWebEngineView::loadFinished, this, [=] (bool ok) {
+        if (ok) {
+            auto url = this->url();
+            auto settingsManager = KiwixApp::instance()->getSettingsManager();
+            qreal zoomFactor;
+            QUrlQuery query(url);
+            if (query.hasQueryItem("pattern")) {
+               zoomFactor = settingsManager->getZoomFactor();
+            } else {
+                auto zimId = url.host().split('.')[0];
+                zoomFactor = settingsManager->getZoomFactorByZimId(zimId);
+            }
+            this->setZoomFactor(zoomFactor);
+        }
+    });
 }
 
 WebView::~WebView()
