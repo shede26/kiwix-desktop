@@ -27,8 +27,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(app->getAction(KiwixApp::ExitAction), &QAction::triggered,
             this, &QMainWindow::close);
-    connect(app->getAction(KiwixApp::ToggleFullscreenAction), &QAction::triggered,
-            this, &MainWindow::toggleFullScreen);
     connect(app->getAction(KiwixApp::ToggleReadingListAction), &QAction::toggled,
             this, &MainWindow::when_ReadingList_toggled);
     connect(app->getAction(KiwixApp::AboutAction), &QAction::triggered,
@@ -63,6 +61,7 @@ MainWindow::MainWindow(QWidget *parent) :
             mp_ui->mainToolBar, &TopWidget::updateBackForwardButtons);
     connect(mp_ui->tabBar, &TabBar::libraryPageDisplayed,
             this, &MainWindow::when_libraryPageDisplayed);
+    connect(mp_ui->tabBar, &TabBar::toggleFullscreen, this, &MainWindow::toggleFullScreen);
 
     mp_ui->contentmanagerside->setContentManager(app->getContentManager());
     mp_ui->sideBar->setCurrentWidget(mp_ui->contentmanagerside);

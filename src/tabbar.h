@@ -53,6 +53,7 @@ signals:
     void webActionEnabledChanged(QWebEnginePage::WebAction action, bool enabled);
     void libraryPageDisplayed(bool displayed);
     void currentTitleChanged(const QString& title);
+    void toggleFullscreen();
 
 public slots:
     void closeTab(int index);
